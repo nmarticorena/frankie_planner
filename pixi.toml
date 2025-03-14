@@ -1,0 +1,31 @@
+[project]
+authors = ["nmarticorena <nicolas.marticorena.vidal@gmail.com>"]
+channels = ["conda-forge"]
+description = "Add a short description here"
+name = "src"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+develop = {cmd = ["nvim", "."]}
+
+[pypi-options]
+no-build-isolation = []
+
+[system-requirements]
+cuda="12.0"
+
+[dependencies]
+cuda = {version = "12.*"}
+pytorch = {version = ">=2.4.0,<3", build = "cuda120*"}
+python="3.11.*"
+setuptools = ">42"
+torchvision = ">=0.19.1,<0.20"
+pip = ">=24.3.1,<25"
+ruff = ">=0.7.2,<0.8"
+pyright = ">=1.1.388,<2"
+hatch = ">=1.13.0,<2"
+
+
+[pypi-dependencies]
+src = {path = ".", editable = true}
