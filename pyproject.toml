@@ -1,5 +1,5 @@
 [project]
-name = "src"
+name = "frankie_planner"
 version = "0.1.0"  # You can specify a version here
 description = "Description of your project"
 dependencies = []  # Add dependencies if there are any

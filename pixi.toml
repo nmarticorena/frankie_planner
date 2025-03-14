@@ -2,7 +2,7 @@
 authors = ["nmarticorena <nicolas.marticorena.vidal@gmail.com>"]
 channels = ["conda-forge"]
 description = "Add a short description here"
-name = "src"
+name = "frankie_planner"
 platforms = ["linux-64"]
 version = "0.1.0"
 
@@ -28,4 +28,4 @@ hatch = ">=1.13.0,<2"
 
 
 [pypi-dependencies]
-src = {path = ".", editable = true}
+frankie_planner = {path = ".", editable = true}

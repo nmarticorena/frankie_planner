@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
 setup(
-    name = 'src',
+    name = 'frankie_planner',
     packages = find_packages(),
 )
