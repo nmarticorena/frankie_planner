@@ -1,0 +1,3 @@
+[submodule "src/stretch_kinematics_plugin"]
+	path = src/stretch_kinematics_plugin
+	url = git@github.com:nmarticorena/stretch_kinematics_plugin.git
