@@ -1,3 +1,6 @@
 [submodule "src/stretch_kinematics_plugin"]
 	path = src/stretch_kinematics_plugin
 	url = git@github.com:nmarticorena/stretch_kinematics_plugin.git
+[submodule "src/frankie_moveit_config"]
+	path = src/frankie_moveit_config
+	url = git@github.com:nmarticorena/frankie_moveit_config.git
