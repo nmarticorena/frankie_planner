@@ -1,31 +1,37 @@
 [project]
 authors = ["nmarticorena <nicolas.marticorena.vidal@gmail.com>"]
-channels = ["conda-forge"]
-description = "Add a short description here"
+channels = ["file:///home/nmarticorena/Documents/robostack/ros-jazzy/output/", "conda-forge", "robostack-jazzy"]
 name = "frankie_planner"
 platforms = ["linux-64"]
 version = "0.1.0"
 
+[activation]
+scripts=["install/setup.sh"]
+
 [tasks]
-develop = {cmd = ["nvim", "."]}
+build={cmd = "colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release", inputs = ["src"]}
+rviz={cmd = "ros2 launch frankie_rmmi_benchmark demo.launch.py", depends-on = ["build"]}
+benchmark={cmd ="python3 src/frankie_moveit_config/frankie_rmmi_benchmark/scripts/load_rmmi.py", depends-on=["build"]}
 
-[pypi-options]
-no-build-isolation = []
-
-[system-requirements]
-cuda="12.0"
 
 [dependencies]
-cuda = {version = "12.*"}
-pytorch = {version = ">=2.4.0,<3", build = "cuda120*"}
-python="3.11.*"
-setuptools = ">42"
-torchvision = ">=0.19.1,<0.20"
-pip = ">=24.3.1,<25"
-ruff = ">=0.7.2,<0.8"
-pyright = ">=1.1.388,<2"
-hatch = ">=1.13.0,<2"
-
-
-[pypi-dependencies]
-frankie_planner = {path = ".", editable = true}
+ros-jazzy-desktop = ">=0.11.0,<0.12"
+ros-jazzy-moveit = ">=2.12.1,<3"
+ros-jazzy-octomap = ">=1.10.0,<2"
+compilers = ">=1.9.0,<2"
+cmake = ">=4.0.0,<5"
+pkg-config = ">=0.29.2,<0.30"
+make = ">=4.4.1,<5"
+ninja = ">=1.12.1,<2"
+colcon-common-extensions = ">=0.3.0,<0.4"
+catkin_tools = ">=0.9.4,<0.10"
+rosdep = ">=0.25.1,<0.26"
+ros-jazzy-ros-testing = ">=0.6.0,<0.7"
+ros-jazzy-test-msgs = ">=2.0.2,<3"
+libgl-devel = ">=1.7.0,<2"
+ros-jazzy-joint-trajectory-controller = ">=4.20.0,<5"
+ros-jazzy-joint-state-broadcaster = ">=4.20.0,<5"
+ros-jazzy-controller-manager = ">=4.25.0,<5"
+ros-jazzy-moveit-py = ">=2.12.1,<3"
+ros-jazzy-moveit-ros-perception = ">=2.12.1,<3"
+spatialmath-python = ">=1.1.14,<2"
