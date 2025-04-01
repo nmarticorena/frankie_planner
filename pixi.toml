@@ -10,6 +10,7 @@ scripts=["install/setup.sh"]
 
 [tasks]
 build={cmd = "colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release", inputs = ["src"]}
+clean={cmd = "rm -rf install/ log/ build/"}
 rviz={cmd = "ros2 launch frankie_rmmi_benchmark demo.launch.py", depends-on = ["build"]}
 benchmark={cmd ="python3 src/frankie_moveit_config/frankie_rmmi_benchmark/scripts/load_rmmi.py", depends-on=["build"]}
 
@@ -35,3 +36,4 @@ ros-jazzy-controller-manager = ">=4.25.0,<5"
 ros-jazzy-moveit-py = ">=2.12.1,<3"
 ros-jazzy-moveit-ros-perception = ">=2.12.1,<3"
 spatialmath-python = ">=1.1.14,<2"
+pandas = ">=2.2.3,<3"
