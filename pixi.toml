@@ -38,6 +38,7 @@ ros-jazzy-moveit-ros-perception = ">=2.12.1,<3"
 spatialmath-python = ">=1.1.14,<2"
 pandas = ">=2.2.3,<3"
 tyro = ">=0.9.18,<0.10"
+seaborn = ">=0.13.2,<0.14"
 
 [pypi-dependencies]
 frankie_planner= {path = ".", editable = true}
