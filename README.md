@@ -1,35 +1,35 @@
 
-# python-template
+# frankie_planner
 
-Template for python projects
-Mainly based on [goodresearch ](https://goodresearch.dev).
+Minimal example of frankie planning pipeline using moveit
+
+## Explanation
+
+This repo consider the required moveit2 library including the ros dependencies, inside the src folder we have the different ros packages including:
+```
+- frankie_description -> Robot description
+- frankie_moveit_config -> Planning configuration, considering the non-holonomic constraints of the robot
+- frankie_planner -> launch files and scene descriptions
+- stretch_kinematics_plugin -> Modified version of the stretch kinematics plugin to sample ik solutions
+```
+
+### Minor details
+The modifications for the ik plugin consider in a nutshell that we always start with a random seed to avoid re using a position of the base previously computed
 
 ## Usage
 Just run the following:
-```
-setup.sh [NEW_NAME]
-```
-This is going to replace the template {{python_template}} with the desired new library name, and the respective placeholders in the setup tools. 
-The default pixi install considers the basic of pytorch and cuda12.0. This is quite specific so going to think to add more default solutions.
 
-
-## Defines the structure of each project. 
+Only first time
 ```
-| -- configs
-| -- data
-| -- logs
-| -- results
-| -- scripts
-| -- tests
--- .gitignore
--- enviroment.yml
--- README.md
+pixi run build
 ```
 
-- **data:** where to large files such as datasets, results and others
-- **logs:** Folder that works as a dump for different logs of experiments
-- **results:** Nicer version of the visualization of what was saved in each of the logs, here results should be in the form of folder or in some case jupyter-notebooks that explain the experiments, by default this folder is not syncqed with github unless is 
-- **Configs:** Different configurations to run the experiments, also config files for different robot configurations
-- **scripts:** All the files that are self contained that usually only perform one thing, then can be changed using arguments
-- **tests:** Scripts that test a functionality an in some cases the interactive scripts that allows to perform differnet modifications
+Then on one terminal to launch the visualization, controllers and moveit configs
+```
+pixi run rviz 
+```
 
+Finally to run the planning pipeling using moveit_py
+```
+pixi run python scripts/load_rmmi.py
+```
