@@ -20,5 +20,12 @@ sns.boxplot(data["IK_total"])
 plt.ylabel("total IK sampled")
 plt.savefig("Bookshelf_IK_Total.png")
 
+plt.cla()
+sns.histplot(data["plan_tries"], binwidth = 1)
+plt.yscale("log")
+# plt.("tries")
+plt.xlabel("RRT Tries")
+
+plt.savefig("Planner_tries.png")
 
 
