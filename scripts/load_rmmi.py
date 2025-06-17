@@ -19,8 +19,6 @@ import moveit_msgs
 
 import frankie_planner.moveit_utils as utils
 
-# config file libraries
-
 
 def main():
     ###################################################################
@@ -28,7 +26,7 @@ def main():
     ###################################################################
     rclpy.init()
     logger = get_logger("moveit_py_planning_scene")
-    
+
     planning_interface = utils.get_planning_interface()
 
     pose_node = rclpy.create_node("pose_publisher")
@@ -40,8 +38,8 @@ def main():
 
     planning_scene_monitor = planning_interface.get_planning_scene_monitor()
 
-    package_path =  "/home/nmarticorena/Documents/tutorials/moveit/jazzy_ws/src/frankie_planner/"
-    
+    package_path = __import__("frankie_planner").__path__[0] + "/../"
+
     working = 0 # To have a rolling avg window
 
     episode_template = {
@@ -51,7 +49,7 @@ def main():
         "IK_avg": 0,
         "plan_tries" : 0,
         "wall_time" : 0,
-    }     
+    }
     exp_data = []
 
 
@@ -61,9 +59,8 @@ def main():
         exp_name = f"bookshelf_cage_{i:04d}"
 
         data["name"] = exp_name
-        target_pose = utils.load_rmmi_scene(planning_scene_monitor, f"{package_path}/data/bookshelf_cage/{exp_name}.json")
-        
-        # target_pose = utils.load_rmmi_scene(planning_scene_monitor, f"{package_path}/data/table_new/table_new_{i:04d}.json")
+        target_pose = utils.load_rmmi_scene(planning_scene_monitor, f"{package_path}/data/bookshelf_cage/{exp_name}.json", True)
+
         robot_state = RobotState(planning_interface.get_robot_model())
         # Set the pose goal
         pose_goal = utils.sm_to_ros(target_pose)
@@ -74,7 +71,7 @@ def main():
         pose_msg.pose = pose_goal
 
         pose_pub.publish(pose_msg)
-        
+
         ti = time.perf_counter()
         solved = False
         for plan_tries in range(100):
@@ -87,8 +84,8 @@ def main():
                     if not ik_sol:
                         continue
                     robot_state.update()  # required to update transforms
-                    
-                    robot_collision_status = scene.is_state_colliding( 
+
+                    robot_collision_status = scene.is_state_colliding(
                         robot_state=robot_state, joint_model_group_name="mobile_base_arm", verbose=False
                     )
                     robot_msg = utils.convert_to_display_robot_state(robotStateToRobotStateMsg(robot_state))
@@ -102,15 +99,16 @@ def main():
             if ik_solved: # We try to plan
                 robot.set_start_state(configuration_name="home")
                 robot.set_goal_state(robot_state = robot_state)
-                
+
 
                 plan = utils.plan(robot, logger)
                 if plan:
+                    input("Press enter to continue")
                     working += 1
                     solved = True
                     print(f"Problem {exp_name} solved, after ik:{total_ik_tries} and plan tries {plan_tries}")
                     break
-        
+
         data["solved"] = solved
         data["IK_total"] = total_ik_tries
         data["IK_avg"] = total_ik_tries/(plan_tries + 1)
@@ -121,7 +119,7 @@ def main():
         print(data)
         exp_data.append(data)
 
-        print(f"In total we obtained {working} / {i+1}") 
+        print(f"In total we obtained {working} / {i+1}")
     df = pd.DataFrame(exp_data)
     print(df)
     df.to_csv("bookshelf_results.csv")
