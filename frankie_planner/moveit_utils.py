@@ -29,13 +29,19 @@ def plan(
         return False
 
 
-def load_rmmi_scene(planning_scene_monitor, file_path:str)-> sm.SE3:
+def load_rmmi_scene(planning_scene_monitor, file_path:str, collisions = True)-> sm.SE3:
     """Helper function that adds collision objects to the planning scene."""
     with open(file_path, 'r') as file:
         data = json.load(file)
 
     boxes = data["cubes"]
     cylinders = data["cylinders"]
+
+
+    target_pose = sm.SE3(data["target"], check = False) * sm.SE3.Tz(-0.1034)
+
+    if not collisions:
+        return target_pose
 
     with planning_scene_monitor.read_write() as scene:
         collision_object = CollisionObject()
@@ -50,12 +56,12 @@ def load_rmmi_scene(planning_scene_monitor, file_path:str)-> sm.SE3:
             box_pose.position.y = position[1]
             box_pose.position.z = position[2]
             dimensions = [d * 2 for d in dimensions]
-            
+
 
             box = SolidPrimitive()
             box.type = SolidPrimitive.BOX
             box.dimensions = dimensions
-    
+
             collision_object.primitives.append(box)
             collision_object.primitive_poses.append(box_pose)
             collision_object.operation = CollisionObject.ADD
@@ -66,12 +72,12 @@ def load_rmmi_scene(planning_scene_monitor, file_path:str)-> sm.SE3:
             box_pose.position.x = position[0]
             box_pose.position.y = position[1]
             box_pose.position.z = position[2]
-            
+
 
             box = SolidPrimitive()
             box.type = SolidPrimitive.CYLINDER
             box.dimensions = [h * 2, r]
-    
+
             collision_object.primitives.append(box)
             collision_object.primitive_poses.append(box_pose)
             collision_object.operation = CollisionObject.ADD
@@ -79,9 +85,6 @@ def load_rmmi_scene(planning_scene_monitor, file_path:str)-> sm.SE3:
         scene.apply_collision_object(collision_object)
         scene.current_state.update()  # Important to ensure the scene is updated
 
-
-    target_pose = sm.SE3(data["target"], check = False) * sm.SE3.Tz(-0.1034) 
-    
     return target_pose
 
 def convert_to_display_robot_state(robot_state_msg):
@@ -112,7 +115,7 @@ def sm_to_ros(pose: sm.SE3):
     pose_msg.orientation.w = q[3]
 
     return pose_msg
-    
+
 def get_planning_interface() -> MoveItPy:
     moveit_config = (
         MoveItConfigsBuilder(robot_name="frankie", package_name="frankie_moveit_config")
@@ -124,5 +127,8 @@ def get_planning_interface() -> MoveItPy:
         .trajectory_execution(file_path="config/copy_controllers.yaml")
         .moveit_cpp(file_path="config/moveit_cpp.yaml")
     ).to_moveit_configs().to_dict()
+    import json
+    with open("moveit_config.json", "w") as f:
+        json.dump(moveit_config, f, indent=4)
     return MoveItPy(node_name="moveit_py", config_dict = moveit_config)
 
