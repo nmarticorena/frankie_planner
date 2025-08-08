@@ -19,6 +19,15 @@ The modifications for the ik plugin consider in a nutshell that we always start 
 ## Usage
 Just run the following:
 
+First clone this repo and the submodules
+
+```
+git clone git@github.com:nmarticorena/frankie_planner.git
+cd frankie_planner
+git submodule update --init --recursive
+```
+
+
 Only first time
 ```
 pixi run build
@@ -26,7 +35,7 @@ pixi run build
 
 Then on one terminal to launch the visualization, controllers and moveit configs
 ```
-pixi run rviz 
+pixi run rviz
 ```
 
 Finally to run the planning pipeling using moveit_py
